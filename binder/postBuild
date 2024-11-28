@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -e
+set -x  # Enable debug mode
 
 # Log the start of the postBuild process
 echo "Starting postBuild process..."
@@ -8,6 +9,12 @@ echo "Starting postBuild process..."
 echo "Installing Coursier..."
 curl -fLo cs https://github.com/coursier/coursier/releases/download/v2.0.3/cs-x86_64-pc-linux
 chmod +x cs
+
+# Check if Coursier was downloaded successfully
+if [ ! -f "./cs" ]; then
+  echo "Error: Coursier download failed."
+  exit 1
+fi
 
 ALMOND_VERSION=0.11.1
 
@@ -19,7 +26,7 @@ echo "Installing almond for Scala 2.13..."
   --display-name "Scala (2.13)" \
   --env "JAVA_OPTS=-XX:MaxRAMPercentage=80.0" \
   --variable-inspector \
-  </dev/null 2>&1 | grep -v '^Download'
+  </dev/null 2>&1 | tee /tmp/almond-install-2.13.log
 
 # Install almond for Scala 2.12
 echo "Installing almond for Scala 2.12..."
@@ -29,31 +36,30 @@ echo "Installing almond for Scala 2.12..."
   --display-name "Scala (2.12)" \
   --env "JAVA_OPTS=-XX:MaxRAMPercentage=80.0" \
   --variable-inspector \
-  </dev/null 2>&1 | grep -v '^Download'
+  </dev/null 2>&1 | tee /tmp/almond-install-2.12.log
 
 # Install almond 0.6.0 for Scala 2.11
-# TODO: Remove once TransmogrifAI and vegas are updated for Scala 2.12
-SCALA_VERSION=2.11.12 ALMOND_VERSION=0.6.0
 echo "Installing almond for Scala 2.11 (almond v0.6.0)..."
+SCALA_VERSION=2.11.12 ALMOND_VERSION=0.6.0
 ./cs bootstrap \
   -r jitpack \
   -i user -I user:sh.almond:scala-kernel-api_$SCALA_VERSION:$ALMOND_VERSION \
   sh.almond:scala-kernel_$SCALA_VERSION:$ALMOND_VERSION \
   --sources --default=true \
   -o almond-scala-2.11 \
-  </dev/null 2>&1 | grep -v '^Download'
+  </dev/null 2>&1 | tee /tmp/almond-install-2.11.log
 ./almond-scala-2.11 --install --id scala211 --display-name "Scala (2.11)" \
   --command "java -XX:MaxRAMPercentage=80.0 -jar almond-scala-2.11 --id scala211 --display-name 'Scala (2.11)'" \
   --copy-launcher \
   --metabrowse
 rm -f almond-scala-2.11
 
-# Install required Jupyter/JupyterLab extensions
+# Install required JupyterLab extensions
 echo "Installing JupyterLab extensions..."
 jupyter labextension install --minimize=False \
   jupyterlab-plotly \
   @almond-sh/scalafmt \
-  @almond-sh/jupyterlab_variableinspector
+  @almond-sh/jupyterlab_variableinspector || { echo "Error: JupyterLab extension installation failed."; tail -n 50 /tmp/jupyterlab-debug-*.log; exit 1; }
 
 # Set indentation to two spaces for JupyterLab and classic notebook
 echo "Configuring Jupyter indentation settings..."
