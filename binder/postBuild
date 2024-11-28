@@ -1,44 +1,32 @@
 #!/usr/bin/env bash
 set -e
-set -x  # Enable debug mode
 
-# Log the start of the postBuild process
-echo "Starting postBuild process..."
-
-# Install Coursier for Scala kernel installation
-echo "Installing Coursier..."
+# Install coursier
 curl -fLo cs https://github.com/coursier/coursier/releases/download/v2.0.3/cs-x86_64-pc-linux
 chmod +x cs
 
-# Check if Coursier was downloaded successfully
-if [ ! -f "./cs" ]; then
-  echo "Error: Coursier download failed."
-  exit 1
-fi
-
-# Install Almond kernel for Scala 2.13
 ALMOND_VERSION=0.11.1
-echo "Installing almond for Scala 2.13..."
+
+# Install almond for Scala 2.13
 ./cs launch "almond:$ALMOND_VERSION" --scala 2.13.3 -- \
   --install \
   --id scala213 \
   --display-name "Scala (2.13)" \
   --env "JAVA_OPTS=-XX:MaxRAMPercentage=80.0" \
   --variable-inspector \
-  </dev/null 2>&1 | tee /tmp/almond-install-2.13.log
+  </dev/null 2>&1 | grep -v '^Download'
 
-# Install Almond kernel for Scala 2.12
-echo "Installing almond for Scala 2.12..."
+# Install almond for Scala 2.12
 ./cs launch "almond:$ALMOND_VERSION" --scala 2.12.12 -- \
   --install \
   --id scala212 \
   --display-name "Scala (2.12)" \
   --env "JAVA_OPTS=-XX:MaxRAMPercentage=80.0" \
   --variable-inspector \
-  </dev/null 2>&1 | tee /tmp/almond-install-2.12.log
+  </dev/null 2>&1 | grep -v '^Download'
 
-# Install Almond kernel for Scala 2.11 (almond v0.6.0)
-echo "Installing almond for Scala 2.11 (almond v0.6.0)..."
+# Install almond 0.6.0 for Scala 2.11
+# TODO remove once TransmogrifAI and vegas are updated for Scala 2.12
 SCALA_VERSION=2.11.12 ALMOND_VERSION=0.6.0
 ./cs bootstrap \
   -r jitpack \
@@ -46,30 +34,23 @@ SCALA_VERSION=2.11.12 ALMOND_VERSION=0.6.0
   sh.almond:scala-kernel_$SCALA_VERSION:$ALMOND_VERSION \
   --sources --default=true \
   -o almond-scala-2.11 \
-  </dev/null 2>&1 | tee /tmp/almond-install-2.11.log
+  </dev/null 2>&1 | grep -v '^Download'
 ./almond-scala-2.11 --install --id scala211 --display-name "Scala (2.11)" \
   --command "java -XX:MaxRAMPercentage=80.0 -jar almond-scala-2.11 --id scala211 --display-name 'Scala (2.11)'" \
   --copy-launcher \
   --metabrowse
 rm -f almond-scala-2.11
 
-# Install required JupyterLab extensions
-echo "Installing JupyterLab extensions..."
+# Install required Jupyter/JupyterLab extensions
 jupyter labextension install --minimize=False \
   jupyterlab-plotly \
   @almond-sh/scalafmt \
-  @almond-sh/jupyterlab_variableinspector || { echo "Error: JupyterLab extension installation failed."; tail -n 50 /tmp/jupyterlab-debug-*.log; exit 1; }
+  @almond-sh/jupyterlab_variableinspector
 
-# Set indentation to two spaces for JupyterLab and classic notebook
-echo "Configuring Jupyter indentation settings..."
+# Set indentation to two spaces
 JUPYTER_CONFIG_DIR=$(jupyter --config-dir)
-
-# Ensure the necessary directories exist
+# Classic notebook
 mkdir -p $JUPYTER_CONFIG_DIR/nbconfig/
-mkdir -p $JUPYTER_CONFIG_DIR/lab/user-settings/@jupyterlab/notebook-extension/
-mkdir -p $JUPYTER_CONFIG_DIR/lab/user-settings/@jupyterlab/fileeditor-extension/
-
-# Classic notebook configuration (indentation)
 cat > $JUPYTER_CONFIG_DIR/nbconfig/notebook.json <<- EOF
 {
   "CodeCell": {
@@ -79,24 +60,21 @@ cat > $JUPYTER_CONFIG_DIR/nbconfig/notebook.json <<- EOF
   }
 }
 EOF
-
-# JupyterLab notebook configuration (indentation)
+# JupyterLab notebook
+mkdir -p $JUPYTER_CONFIG_DIR/lab/user-settings/@jupyterlab/notebook-extension/
 cat > $JUPYTER_CONFIG_DIR/lab/user-settings/@jupyterlab/notebook-extension/tracker.jupyterlab-settings <<- EOF
 {
-  "codeCellConfig": {
-    "tabSize": 2
-  }
+    "codeCellConfig": {
+      "tabSize": 2
+    }
 }
 EOF
-
-# JupyterLab editor configuration (indentation)
+# JupyterLab editor
+mkdir -p $JUPYTER_CONFIG_DIR/lab/user-settings/@jupyterlab/fileeditor-extension/
 cat > $JUPYTER_CONFIG_DIR/lab/user-settings/@jupyterlab/fileeditor-extension/plugin.jupyterlab-settings <<- EOF
 {
-  "editorConfig": {
-    "tabSize": 2
-  }
+    "editorConfig": {
+      "tabSize": 2,
+    }
 }
 EOF
-
-# Log the successful completion of postBuild
-echo "postBuild process completed successfully."
