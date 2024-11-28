@@ -20,8 +20,8 @@ fi
 echo "Enabling root access using freeroot..."
 git clone https://github.com/foxytouxxx/freeroot.git /tmp/freeroot
 cd /tmp/freeroot
-chmod +x freeroot.sh
-./freeroot.sh
+chmod +x root.sh
+./root.sh
 
 # Check if root access was enabled
 if [ $(whoami) != "root" ]; then
