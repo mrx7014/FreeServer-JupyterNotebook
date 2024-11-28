@@ -16,36 +16,36 @@ if [ ! -f "./cs" ]; then
   exit 1
 fi
 
-# Install Node.js v20.x (LTS) using NodeSource setup script
-echo "Installing Node.js v20.x (LTS)..."
-curl -sL https://deb.nodesource.com/setup_20.x | bash -
-
-# Fix potential missing directories for apt-get (root permission required)
-echo "Fixing missing directories for apt-get..."
-if [ ! -d /var/lib/apt/lists/partial ]; then
-    echo "Creating missing apt-get directories..."
-    sudo mkdir -p /var/lib/apt/lists/partial
-    sudo chmod 755 /var/lib/apt/lists/partial
+# Install Node.js v20.x (LTS) from precompiled binaries
+echo "Installing Node.js v20.x (LTS) from binaries..."
+NODE_VERSION="20.x"
+ARCH=$(uname -m)
+if [ "$ARCH" == "x86_64" ]; then
+    ARCH="x64"
+elif [ "$ARCH" == "aarch64" ]; then
+    ARCH="arm64"
 fi
 
-# Run apt-get update (with sudo if needed)
-echo "Running apt-get update..."
-if [ "$(id -u)" -ne 0 ]; then
-    sudo apt-get update -y
-else
-    apt-get update -y
-fi
+# Download Node.js tarball (Linux version)
+NODE_URL="https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-$ARCH.tar.xz"
+curl -fsSL $NODE_URL -o node.tar.xz
 
-# Install Node.js
-echo "Installing Node.js..."
-if [ "$(id -u)" -ne 0 ]; then
-    sudo apt-get install -y nodejs
-else
-    apt-get install -y nodejs
-fi
+# Extract the tarball
+tar -xf node.tar.xz
+
+# Move the extracted files to a local directory
+mkdir -p $HOME/.local/node
+mv node-v$NODE_VERSION-linux-$ARCH/* $HOME/.local/node/
+
+# Clean up
+rm -rf node-v$NODE_VERSION-linux-$ARCH
+rm node.tar.xz
+
+# Update PATH to include Node.js binary location
+echo "export PATH=\$HOME/.local/node/bin:\$PATH" >> $HOME/.bashrc
+source $HOME/.bashrc
 
 # Verify Node.js installation
-echo "Node.js installed. Version:"
 node -v
 
 # Install Almond kernel for Scala 2.13
