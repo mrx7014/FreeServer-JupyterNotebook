@@ -1,6 +1,9 @@
 # Lunch on Binder
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mrx7014/jupyter-notebook-Almond/master?labpath=index.ipynb)
 
+>[!NOTE]
+> Wait almost 5 min after launching is done and you will redirect to Jupyter Notebook Lab
+>
 
 # Long Life-Time (enter on terminal)
 ```sh
