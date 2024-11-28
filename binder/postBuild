@@ -16,40 +16,6 @@ if [ ! -f "./cs" ]; then
   exit 1
 fi
 
-# Install Node.js v20.x (LTS) from precompiled binaries
-echo "Installing Node.js v20.x (LTS) from binaries..."
-NODE_VERSION="20.0.0"  # Specify the exact version of Node.js you want
-ARCH=$(uname -m)
-
-# Check architecture and set binary URL accordingly
-if [ "$ARCH" == "x86_64" ]; then
-    ARCH="x64"
-elif [ "$ARCH" == "aarch64" ]; then
-    ARCH="arm64"
-fi
-
-# Download Node.js tarball for the specified version
-NODE_URL="https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-$ARCH.tar.xz"
-curl -fsSL $NODE_URL -o node.tar.xz
-
-# Extract the tarball
-tar -xf node.tar.xz
-
-# Move the extracted files to a local directory
-mkdir -p $HOME/.local/node
-mv node-v$NODE_VERSION-linux-$ARCH/* $HOME/.local/node/
-
-# Clean up
-rm -rf node-v$NODE_VERSION-linux-$ARCH
-rm node.tar.xz
-
-# Update PATH to include Node.js binary location
-echo "export PATH=\$HOME/.local/node/bin:\$PATH" >> $HOME/.bashrc
-source $HOME/.bashrc
-
-# Verify Node.js installation
-node -v
-
 # Install Almond kernel for Scala 2.13
 ALMOND_VERSION=0.11.1
 echo "Installing almond for Scala 2.13..."
