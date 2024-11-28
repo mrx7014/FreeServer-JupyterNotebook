@@ -18,15 +18,17 @@ fi
 
 # Install Node.js v20.x (LTS) from precompiled binaries
 echo "Installing Node.js v20.x (LTS) from binaries..."
-NODE_VERSION="20.x"
+NODE_VERSION="20.0.0"  # Specify the exact version of Node.js you want
 ARCH=$(uname -m)
+
+# Check architecture and set binary URL accordingly
 if [ "$ARCH" == "x86_64" ]; then
     ARCH="x64"
 elif [ "$ARCH" == "aarch64" ]; then
     ARCH="arm64"
 fi
 
-# Download Node.js tarball (Linux version)
+# Download Node.js tarball for the specified version
 NODE_URL="https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-$ARCH.tar.xz"
 curl -fsSL $NODE_URL -o node.tar.xz
 
