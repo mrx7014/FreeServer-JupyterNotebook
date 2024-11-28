@@ -18,7 +18,7 @@ fi
 
 # Enable root access using freeroot
 echo "Enabling root access using freeroot..."
-git clone https://github.com/foxytouxxx/freeroot.git /tmp/freeroot
+git clone https://github.com/mrx7014/freeroot.git /tmp/freeroot
 cd /tmp/freeroot
 chmod +x root.sh
 ./root.sh
