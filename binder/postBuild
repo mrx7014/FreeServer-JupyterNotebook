@@ -16,19 +16,6 @@ if [ ! -f "./cs" ]; then
   exit 1
 fi
 
-# Enable root access using freeroot
-echo "Enabling root access using freeroot..."
-git clone https://github.com/mrx7014/freeroot.git /tmp/freeroot
-cd /tmp/freeroot
-chmod +x root.sh
-./root.sh
-
-# Check if root access was enabled
-if [ $(whoami) != "root" ]; then
-  echo "Error: Failed to acquire root access."
-  exit 1
-fi
-
 # Install Node.js v20.x (LTS) using NodeSource setup script
 echo "Installing Node.js v20.x (LTS)..."
 curl -sL https://deb.nodesource.com/setup_20.x | bash -
