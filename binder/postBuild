@@ -2,6 +2,9 @@
 set -e
 set -x  # Enable debug mode
 
+# Workaround for Node.js/OpenSSL 3.0 issues
+export NODE_OPTIONS=--openssl-legacy-provider
+
 # Log the start of the postBuild process
 echo "Starting postBuild process..."
 
@@ -52,10 +55,6 @@ SCALA_VERSION=2.11.12 ALMOND_VERSION=0.6.0
   --copy-launcher \
   --metabrowse
 rm -f almond-scala-2.11
-
-# Skip JupyterLab build step (if necessary)
-echo "Skipping JupyterLab build step."
-export JUPYTER_DISABLE_CONFIGURER=true
 
 # Install required JupyterLab extensions
 echo "Installing JupyterLab extensions..."
