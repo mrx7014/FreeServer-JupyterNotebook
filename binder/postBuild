@@ -19,10 +19,18 @@ fi
 # Install Node.js v20.x (LTS) using NodeSource setup script
 echo "Installing Node.js v20.x (LTS)..."
 curl -sL https://deb.nodesource.com/setup_20.x | bash -
+
+# Fix potential missing directories for apt-get
+echo "Fixing missing directories for apt-get..."
+mkdir -p /var/lib/apt/lists/partial
+chmod 755 /var/lib/apt/lists/partial
+
+# Update apt and install Node.js
 apt-get update -y
 apt-get install -y nodejs
 
 # Verify Node.js installation
+echo "Node.js installed. Version:"
 node -v
 
 # Install Almond kernel for Scala 2.13
