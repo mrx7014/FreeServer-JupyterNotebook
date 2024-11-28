@@ -20,14 +20,29 @@ fi
 echo "Installing Node.js v20.x (LTS)..."
 curl -sL https://deb.nodesource.com/setup_20.x | bash -
 
-# Fix potential missing directories for apt-get
+# Fix potential missing directories for apt-get (root permission required)
 echo "Fixing missing directories for apt-get..."
-mkdir -p /var/lib/apt/lists/partial
-chmod 755 /var/lib/apt/lists/partial
+if [ ! -d /var/lib/apt/lists/partial ]; then
+    echo "Creating missing apt-get directories..."
+    sudo mkdir -p /var/lib/apt/lists/partial
+    sudo chmod 755 /var/lib/apt/lists/partial
+fi
 
-# Update apt and install Node.js
-apt-get update -y
-apt-get install -y nodejs
+# Run apt-get update (with sudo if needed)
+echo "Running apt-get update..."
+if [ "$(id -u)" -ne 0 ]; then
+    sudo apt-get update -y
+else
+    apt-get update -y
+fi
+
+# Install Node.js
+echo "Installing Node.js..."
+if [ "$(id -u)" -ne 0 ]; then
+    sudo apt-get install -y nodejs
+else
+    apt-get install -y nodejs
+fi
 
 # Verify Node.js installation
 echo "Node.js installed. Version:"
