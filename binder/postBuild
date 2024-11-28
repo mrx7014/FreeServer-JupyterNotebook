@@ -18,6 +18,14 @@ fi
 
 ALMOND_VERSION=0.11.1
 
+# Install Node.js v16.x (LTS)
+echo "Installing Node.js v16.x (LTS)..."
+curl -sL https://deb.nodesource.com/setup_16.x | bash -
+apt-get install -y nodejs
+
+# Verify Node.js version
+node -v
+
 # Install almond for Scala 2.13
 echo "Installing almond for Scala 2.13..."
 ./cs launch "almond:$ALMOND_VERSION" --scala 2.13.3 -- \
