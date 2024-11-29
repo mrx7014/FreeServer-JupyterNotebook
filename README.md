@@ -1,4 +1,4 @@
-# Jupyter Notebook with Almond and Binder
+# FreeServer-JupyterNotebook
 
 ### A free Linux server with high End specifications running throw Jupyter Notebooks Lab, Almond (A Scala kernel for Jupyter) and Binder
 
@@ -13,7 +13,7 @@
 <hr>
 
 ### Lunch on Binder
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mrx7014/jupyter-notebook-Almond/master?urlpath=lab%2Ftree%2Fnotebooks%2Findex.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mrx7014/FreeServer-JupyterNotebook/master?urlpath=lab%2Ftree%2Fnotebooks%2Findex.ipynb)
 
 >[!NOTE]
 > Wait almost 5 min after launching is done and you will redirect to Jupyter Notebook Lab
