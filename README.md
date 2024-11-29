@@ -12,7 +12,7 @@
 
 <hr>
 
-### Lunch on Binder
+# Lunch on Binder
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mrx7014/FreeServer-JupyterNotebook/master?urlpath=lab%2Ftree%2Fnotebooks%2Findex.ipynb)
 
 >[!NOTE]
