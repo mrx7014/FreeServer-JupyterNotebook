@@ -62,9 +62,5 @@ unzip
 cpio
 libncurses5-dev
 bzip2
-gcc
-g++-aarch64-linux-gnu
-gcc-arm-linux-gnueabihf
-gcc-arm-linux-gnueabi
 dos2unix
 neofetch
