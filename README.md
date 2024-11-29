@@ -2,17 +2,21 @@
 
 ### A free Linux server with high End specifications running throw Jupyter Notebooks Lab, Almond (A Scala kernel for Jupyter) and Binder
 
+### Server specifications
+
+- RAM : `745GB`
+- Kernel: `5.15.0-107-generic`
+- Shell: `bash 5.0.17`
+- CPU : `Intel Xeon Gold 6140 (72 Cores) @ 2.300GHz`
+- Hard Size : `6TB`
+
 <hr>
 
 ### Lunch on Binder
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mrx7014/jupyter-notebook-Almond/jypalmbin?urlpath=lab%2Ftree%2Fnotebooks%2Findex.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mrx7014/jupyter-notebook-Almond/master?urlpath=lab%2Ftree%2Fnotebooks%2Findex.ipynb)
 
 >[!NOTE]
 > Wait almost 5 min after launching is done and you will redirect to Jupyter Notebook Lab
->
-
->[!NOTE]
-> if you facing any errors after redirect to jupyter notebook lab link change the end of the link from `/tree/index.ipynb` to `/lab` only and you will get access to the terminal
 >
 
 ### Long Life-Time (enter on terminal)
@@ -28,4 +32,9 @@ git clone https://github.com/foxytouxxx/freeroot.git;cd freeroot;chmod +x root.s
 ### Bypass systemctl
 ```sh
 curl -o /bin/systemctl https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl3.py && chmod -R 777 /bin/systemctl
+```
+
+### Setup Script
+```sh
+git clone https://github.com/mrx7014/Servers-Setup-Script ; cd Servers-Setup-Script ; chmod +x setup.sh ; ./setup.sh
 ```
