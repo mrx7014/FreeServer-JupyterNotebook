@@ -5,7 +5,7 @@
 <hr>
 
 ### Lunch on Binder
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mrx7014/jupyter-notebook-Almond/master?labpath=index.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mrx7014/jupyter-notebook-Almond/jypalmbin?urlpath=lab%2Ftree%2Fnotebooks%2Findex.ipynb)
 
 >[!NOTE]
 > Wait almost 5 min after launching is done and you will redirect to Jupyter Notebook Lab
