@@ -29,17 +29,7 @@ jupyter notebook --NotebookApp.shutdown_no_activity_timeout=0
 git clone https://github.com/foxytouxxx/freeroot.git;cd freeroot;chmod +x root.sh;bash root.sh
 ```
 
-### Important Packages after Root access script
-```sh
-sudo apt install git curl wget zip python3 python3-pip
-```
-
 ### Bypass systemctl
 ```sh
 curl -o /bin/systemctl https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl3.py && chmod -R 777 /bin/systemctl
-```
-
-### Setup Script
-```sh
-git clone https://github.com/mrx7014/Servers-Setup-Script ; cd Servers-Setup-Script ; chmod +x setup.sh ; ./setup.sh
 ```
