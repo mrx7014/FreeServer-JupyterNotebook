@@ -55,7 +55,7 @@ This environment comes pre-configured with a variety of essential tools for both
 
 You can quickly access this environment on **Binder** using the button below. Binder will spin up a containerized instance of this environment, allowing you to start coding right away!
 
-[![Launch on Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mrx7014/FreeServer-JupyterNotebook/master?urlpath=lab%2Ftree%2Fnotebooks%2Findex.ipynb)
+[![Launch on Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mrx7014/FreeServer-JupyterNotebook/new?urlpath=lab%2Ftree%2Fnotebooks%2Findex.ipynb)
 
 > [!NOTE] 
 > Please wait about **5 minutes** after launching, as the environment may take some time to be ready. You will be redirected to the **Jupyter Notebook Lab** interface once it’s ready.
