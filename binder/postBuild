@@ -102,5 +102,62 @@ cat > $JUPYTER_CONFIG_DIR/lab/user-settings/@jupyterlab/fileeditor-extension/plu
 }
 EOF
 
+# Cloudflare Tunnel setup
+echo "Downloading cloudflared..."
+mkdir -p "$HOME/.local/bin"
+curl -fLo "$HOME/.local/bin/cloudflared" https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64
+chmod +x "$HOME/.local/bin/cloudflared"
+
+# Make sure ~/.local/bin is in PATH for future shells
+if ! grep -q '.local/bin' "$HOME/.bashrc" 2>/dev/null; then
+  echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
+fi
+
+# Create a helper script the user runs manually from a Jupyter terminal
+mkdir -p "$HOME/.startup"
+cat > "$HOME/.startup/start_tunnel.sh" <<- 'EOF'
+#!/bin/bash
+
+echo "========================================="
+echo "Starting SSH Tunnel with Cloudflare..."
+echo "========================================="
+
+# Start SSH server if available (ignored if not installed / no permission)
+service ssh start > /dev/null 2>&1 || true
+
+# Start cloudflared tunnel and capture the output
+"$HOME/.local/bin/cloudflared" tunnel --url ssh://127.0.0.1:22 > /tmp/tunnel_output.txt 2>&1 &
+
+# Wait for tunnel to be ready and extract the URL
+sleep 3
+
+if [ -f /tmp/tunnel_output.txt ]; then
+    echo ""
+    echo "========================================="
+    echo "TUNNEL READY! Use this SSH command:"
+    echo "========================================="
+    grep -oP 'https://[a-z0-9\-]+\.trycloudflare\.com' /tmp/tunnel_output.txt | head -1 | while read url; do
+        echo "SSH URL: $url"
+        echo ""
+        echo "From your local machine, run:"
+        echo "ssh -o ProxyCommand='cloudflared access tcp --hostname $url' root@localhost"
+        echo ""
+        echo "Keep this terminal open to maintain the tunnel."
+        echo "========================================="
+    done
+else
+    echo "Error: Tunnel failed to start"
+fi
+
+# Keep the script running so the tunnel stays alive
+tail -f /dev/null
+EOF
+
+chmod +x "$HOME/.startup/start_tunnel.sh"
+
+echo "Cloudflared installed successfully!"
+echo "To start the tunnel later, run in a Jupyter terminal:"
+echo "  bash ~/.startup/start_tunnel.sh"
+
 # Log the successful completion of postBuild
 echo "postBuild process completed successfully."
