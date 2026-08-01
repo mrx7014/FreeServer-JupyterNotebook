@@ -54,8 +54,6 @@ clang
 binutils
 perl
 gawk
-python3
-python2
 zstd
 openssl
 unzip
