@@ -58,6 +58,7 @@ rm -f almond-scala-2.11
 
 # Install required JupyterLab extensions
 echo "Installing JupyterLab extensions..."
+echo "ignore-engines true" >> ~/.yarnrc
 jupyter labextension install --minimize=False \
   jupyterlab-plotly \
   @almond-sh/scalafmt \
