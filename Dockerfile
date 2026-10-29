@@ -29,8 +29,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Permit the normal Jupyter user to use sudo without a password.
-# Whether sudo can actually elevate is also controlled by the container
-# runtime; Docker must be started with --security-opt=no-new-privileges:false.
+# Binder may still enforce no-new-privileges at runtime.
 RUN printf '%s\n' \
       'jovyan ALL=(ALL) NOPASSWD:ALL' \
       'Defaults:jovyan !requiretty' \
