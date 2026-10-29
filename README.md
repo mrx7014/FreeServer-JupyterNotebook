@@ -24,7 +24,7 @@ Or use this URL:
 https://mybinder.org/v2/gh/mrx7014/FreeServer-JupyterNotebook/master?urlpath=lab
 ```
 
-The first build may take several minutes because Binder builds the image from the `Dockerfile`.
+The first build may take several minutes. Binder uses `binder/Dockerfile`, which is based on the pinned Almond image `almondsh/almond:0.15.0`.
 
 ### Important Binder and sudo limitation
 
@@ -86,10 +86,9 @@ Running Jupyter as `jovyan` and using `sudo` only when needed is the safer defau
 
 ## Build files
 
-- `Dockerfile`: builds the Almond/Jupyter image and installs system tools and `sudo`.
-- `binder/apt.txt`: intentionally contains no packages; system packages are installed by the root `Dockerfile`.
-- `binder/postBuild`: a minimal hook; Almond and Jupyter are already provided by the base image.
-- `binder/requirements.txt`: intentionally contains no extra Python packages; add project-specific requirements here only if needed.
+- `binder/Dockerfile`: builds the Binder image from Almond and installs system tools and `sudo`.
+- `Dockerfile`: builds the equivalent local image for Docker.
+- `binder/apt.txt`, `binder/postBuild`, and `binder/requirements.txt`: retained as empty/minimal placeholders; `binder/Dockerfile` defines the Binder environment and takes precedence over these files.
 - `notebooks/`: example notebooks copied into the image.
 
 ## Prevent the notebook server from shutting down for inactivity
