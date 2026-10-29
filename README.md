@@ -1,46 +1,46 @@
 # FreeServer-JupyterNotebook
 
-بيئة Jupyter جاهزة للعمل مع **Almond Scala kernel**، وتحتوي على أدوات النظام الأساسية للتطوير، Git، Graphviz، وبناء المشاريع. الصورة مبنية فوق `almondsh/almond:latest`، لذلك تكون Kernels الخاصة بـ Scala مثبتة مسبقًا.
+A ready-to-use Jupyter environment with the **Almond Scala kernel**, common development tools, Git, Graphviz, and the notebooks included in this repository. The image is based on `almondsh/almond:latest`, so Almond's Scala kernels are already installed.
 
-## ما الذي توفره الصورة؟
+## Features
 
-- JupyterLab وJupyter Notebook.
-- Almond kernels الخاصة بـ Scala.
-- Java التي يحتاجها Almond.
-- أدوات التطوير: `git`, `git-lfs`, `build-essential`, `cmake`, `curl`, `wget`, `unzip`, `jq`, `tmux`, `rsync`.
+- JupyterLab and Jupyter Notebook.
+- Almond Scala kernels.
+- Java required by Almond.
+- Development tools including `git`, `git-lfs`, `build-essential`, `cmake`, `curl`, `wget`, `unzip`, `jq`, `tmux`, and `rsync`.
 - Graphviz.
-- `sudo` مضبوط للمستخدم `jovyan` بدون كلمة مرور.
-- محتويات مجلد `notebooks/` متاحة داخل `/home/jovyan/`.
+- `sudo` configured for the `jovyan` user without a password.
+- The contents of `notebooks/` are available under `/home/jovyan/`.
 
-## التشغيل عبر Binder
+## Launch on Binder
 
-افتح البيئة مباشرة من هذا الرابط:
+Open the environment directly with:
 
 [![Launch on Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mrx7014/FreeServer-JupyterNotebook/master?urlpath=lab)
 
-أو استخدم الرابط التالي:
+Or use this URL:
 
 ```text
 https://mybinder.org/v2/gh/mrx7014/FreeServer-JupyterNotebook/master?urlpath=lab
 ```
 
-قد يستغرق Binder عدة دقائق في أول تشغيل لأن الصورة تُبنى من `Dockerfile`.
+The first build may take several minutes because Binder builds the image from the `Dockerfile`.
 
-### ملاحظة مهمة عن Binder وsudo
+### Important Binder and sudo limitation
 
-الـ `Dockerfile` يثبت `sudo` ويضيف صلاحيات المستخدم `jovyan` أثناء بناء الصورة. لكن Binder قد يشغل الحاوية مع حماية `no-new-privileges`. إذا ظهر الخطأ:
+The `Dockerfile` installs `sudo` and configures the `jovyan` user during the image build. However, Binder may run the container with the `no-new-privileges` security setting. If you see:
 
 ```text
 sudo: The "no new privileges" flag is set
 ```
 
-فهذا قيد من منصة Binder نفسها، وليس نقصًا في إعدادات هذا المستودع. لا يمكن للـ `Dockerfile` إلغاء هذا القيد من داخل الحاوية.
+this is a restriction imposed by the Binder platform, not a missing package or repository setting. A Dockerfile cannot remove that restriction from inside the running container.
 
-لتشغيل `sudo apt update` فعليًا، شغّل الصورة محليًا أو على خادم تملك إعداداته.
+To use `sudo apt update` at runtime, run the image locally or on a server whose container runtime you control.
 
-## التشغيل عبر Docker مع sudo فعلي
+## Run locally with Docker
 
-استنسخ المستودع وابنِ الصورة:
+Clone the repository and build the image:
 
 ```bash
 git clone https://github.com/mrx7014/FreeServer-JupyterNotebook.git
@@ -48,7 +48,7 @@ cd FreeServer-JupyterNotebook
 docker build -t free-almond-jupyter .
 ```
 
-شغّل Jupyter:
+Run Jupyter:
 
 ```bash
 docker run --rm -it \
@@ -58,7 +58,7 @@ docker run --rm -it \
   free-almond-jupyter
 ```
 
-افتح الرابط الذي يظهر في الطرفية. داخل Terminal في Jupyter، اختبر:
+Open the URL printed in the terminal. From a Jupyter Terminal, test the setup:
 
 ```bash
 whoami
@@ -66,11 +66,11 @@ sudo -n id
 sudo apt update
 ```
 
-المستخدم الافتراضي هو `jovyan`. البرامج المثبتة في الصورة لا تحتاج إلى `sudo`، أما تثبيت حزم جديدة أثناء التشغيل فيحتاج إلى `sudo` إذا سمحت منصة التشغيل بذلك.
+The default user is `jovyan`. Packages installed in the image do not require `sudo`; installing additional system packages at runtime does, provided the container runtime allows privilege escalation.
 
-## تشغيل Jupyter كـ root عند الحاجة
+## Run Jupyter as root locally
 
-يمكن تشغيل الحاوية نفسها كمستخدم root:
+If you need Jupyter itself to run as root, use:
 
 ```bash
 docker run --rm -it \
@@ -82,30 +82,30 @@ docker run --rm -it \
   start-notebook.py --allow-root
 ```
 
-تشغيل Jupyter كمستخدم `jovyan` مع `sudo` عند الحاجة هو الاختيار المفضل أمنيًا.
+Running Jupyter as `jovyan` and using `sudo` only when needed is the safer default.
 
-## ملفات البناء
+## Build files
 
-- `Dockerfile`: يبني صورة Almond/Jupyter ويثبت أدوات النظام و`sudo`.
-- `binder/apt.txt`: قائمة قديمة لحزم Binder؛ عند استخدام `Dockerfile` تكون الحزم الأساسية معرفة في `Dockerfile` نفسه.
-- `binder/postBuild`: إعداد قديم لتثبيت Almond يدويًا. الصورة الحالية تأتي بـ Almond جاهز، لذلك لا تحتاج إلى تشغيل تثبيت Almond مرة ثانية.
-- `binder/requirements.txt`: متطلبات Python الإضافية القديمة للمشروع.
-- `notebooks/`: أمثلة وملفات Notebook التي تُنسخ إلى الصورة.
+- `Dockerfile`: builds the Almond/Jupyter image and installs system tools and `sudo`.
+- `binder/apt.txt`: legacy Binder package list; the main `Dockerfile` is the source of truth when it is used.
+- `binder/postBuild`: legacy manual Almond installation script. The current base image already includes Almond.
+- `binder/requirements.txt`: additional Python requirements used by the project.
+- `notebooks/`: example notebooks copied into the image.
 
-## إيقاف مهلة الخمول
+## Prevent the notebook server from shutting down for inactivity
 
-في بيئة Jupyter التي تدعم ذلك، يمكن تشغيل:
+In environments that support this option, run:
 
 ```bash
 jupyter notebook --NotebookApp.shutdown_no_activity_timeout=0
 ```
 
-لكن Binder يفرض حدودًا للوقت والموارد من المنصة نفسها، ولا يمكن للمستودع ضمان جلسة دائمة.
+Binder still applies its own resource and lifetime limits, so a repository cannot guarantee a permanent Binder session.
 
-## تنبيه أمني
+## Security note
 
-لا تشغّل سكربتات تمنح root من مستودعات خارجية غير موثوقة. تثبيت الحزم أثناء بناء الصورة هو الأسلوب الآمن والمكرر، أما صلاحيات التشغيل النهائية فتحددها Docker أو Binder أو الخادم الذي يشغل الصورة.
+Do not run untrusted scripts from external repositories to obtain root access. Installing packages while building the image is the predictable and safer approach. Runtime privileges are controlled by Docker, Binder, Kubernetes, or the server running the image.
 
-## الترخيص
+## License
 
-هذا المشروع مرخص تحت [MIT License](LICENSE).
+This project is licensed under the [MIT License](LICENSE).
