@@ -87,9 +87,9 @@ Running Jupyter as `jovyan` and using `sudo` only when needed is the safer defau
 ## Build files
 
 - `Dockerfile`: builds the Almond/Jupyter image and installs system tools and `sudo`.
-- `binder/apt.txt`: legacy Binder package list; the main `Dockerfile` is the source of truth when it is used.
-- `binder/postBuild`: legacy manual Almond installation script. The current base image already includes Almond.
-- `binder/requirements.txt`: additional Python requirements used by the project.
+- `binder/apt.txt`: intentionally contains no packages; system packages are installed by the root `Dockerfile`.
+- `binder/postBuild`: a minimal hook; Almond and Jupyter are already provided by the base image.
+- `binder/requirements.txt`: intentionally contains no extra Python packages; add project-specific requirements here only if needed.
 - `notebooks/`: example notebooks copied into the image.
 
 ## Prevent the notebook server from shutting down for inactivity
