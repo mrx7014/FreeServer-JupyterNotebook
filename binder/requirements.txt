@@ -1,3 +1,2 @@
-nbdime~=3.1
-jupyterlab-git==0.32.0
-jupyterlab==2.2.9
+# The base Almond image already provides JupyterLab and its server packages.
+# Add project-specific Python packages here only when needed.
